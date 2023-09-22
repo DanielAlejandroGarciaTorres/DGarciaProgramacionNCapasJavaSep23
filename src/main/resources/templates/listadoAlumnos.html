@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Listado de Alumnos</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<!--    Desplegar una tabla con la información de Listado de alumnos-->
+    <h1>Lista de alumnos</h1>
+    <ul>
+<!--        EL - Expression language-->
+        <li th:each="alumno : ${alumnos}" th:text="${alumno.nombre}"></li>
+    </ul>
+</body>
+</html>
