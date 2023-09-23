@@ -35,8 +35,12 @@ public class AlumnoController {
     private String listadoAlumnos(Model model){
         List<Alum> alumnos = alumnoDAOImplementation.GetAll(); // recuperación de datos
         model.addAttribute("alumnos",alumnos); //envío de datos para HTML
-        return "listadoAlumnos";
-        
+        return "listadoAlumnos"; 
+    }
+    
+    @GetMapping("/add")
+    public String Add(){
+        return "formalumn";
     }
     
 }
