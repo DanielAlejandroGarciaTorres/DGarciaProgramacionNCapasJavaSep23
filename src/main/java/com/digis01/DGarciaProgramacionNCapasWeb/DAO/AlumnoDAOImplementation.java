@@ -5,11 +5,14 @@
 package com.digis01.DGarciaProgramacionNCapasWeb.DAO;
 
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
+import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -32,6 +35,16 @@ public class AlumnoDAOImplementation implements IAlumnoDAO{
         List<Alum> alumnos = query.getResultList();
         
         return alumnos;
+    }
+
+    @Override
+    @Transactional
+    public void Add(Alum alumno) {
+        alumno.setFechanacimiento(new Date());
+        Semestre semestre = new Semestre();
+        semestre.setIdsemestre(1);
+        alumno.setSemestre(semestre);
+        entityManager.persist(alumno);
     }
     
     

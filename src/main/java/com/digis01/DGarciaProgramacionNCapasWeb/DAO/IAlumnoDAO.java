@@ -18,4 +18,6 @@ public interface IAlumnoDAO {
     // tipo de retorno, nombre del método, parámetros
     List<Alum> GetAll();
     
+    void Add(Alum alumno);
+    
 }

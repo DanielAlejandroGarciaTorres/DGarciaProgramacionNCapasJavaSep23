@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -39,9 +42,33 @@ public class AlumnoController {
     }
     
     @GetMapping("/add")
-    public String Add(){
-        return "formalumn";
+    public String Add(Model model){
+        
+        // Alum alumno = new Alum();
+        model.addAttribute("alumno", new Alum());
+        return "formAlumno";
     }
+    
+    @PostMapping("addalumno")
+    public String Add(@ModelAttribute Alum alumno){
+        
+        //la logica necesaria para enviar dicha información a DAO
+        alumnoDAOImplementation.Add(alumno);
+        
+        return "redirect:/alumno/listado";
+        
+    }
+    
+    @GetMapping("/editar/{idalumno}")
+    public String Update(@PathVariable int idalumno, Model model){
+        
+        //getByID --> precargar elforumalrio JPQL
+        // precargarlo con el model 
+        
+        return "html-para-actualizar";
+    }
+    
+    
     
 }
 

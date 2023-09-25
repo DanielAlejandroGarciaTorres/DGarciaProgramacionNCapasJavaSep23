@@ -111,4 +111,13 @@ public class Alum implements Serializable {
         this.fechanacimiento = fechanacimiento;
     }
 
+    public Semestre getSemestre() {
+        return semestre;
+    }
+
+    public void setSemestre(Semestre semestre) {
+        this.semestre = semestre;
+    }
+
+    
 }
