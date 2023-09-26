@@ -20,4 +20,9 @@ public interface IAlumnoDAO {
     
     void Add(Alum alumno);
     
+//    void Update(int id, Alum alumno);
+    
+    Alum GetById(int idalumnoeditable);
+    
+    void Update(Alum alumno);
 }

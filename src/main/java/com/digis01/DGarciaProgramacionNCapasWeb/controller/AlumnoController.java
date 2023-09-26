@@ -6,6 +6,7 @@ package com.digis01.DGarciaProgramacionNCapasWeb.controller;
 
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.AlumnoDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
+import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,14 +59,30 @@ public class AlumnoController {
         return "redirect:/alumno/listado";
         
     }
-    
-    @GetMapping("/editar/{idalumno}")
+    //localhost:8080/alumno/editarAlumno/85
+    @GetMapping("/editarAlumno/{idalumno}")
     public String Update(@PathVariable int idalumno, Model model){
         
         //getByID --> precargar elforumalrio JPQL
+        Alum alumno = alumnoDAOImplementation.GetById(idalumno);
+        
+        model.addAttribute("alumno", alumno);
+
+        
         // precargarlo con el model 
         
-        return "html-para-actualizar";
+        return "formAlumnoEditable";
+    }
+    
+    @PostMapping("/updateAlumno")
+    public String Update(@ModelAttribute Alum alumno){
+        // actualización
+        Semestre semestre = new Semestre();
+        semestre.setIdsemestre(2);
+        alumno.setSemestre(semestre);
+        alumnoDAOImplementation.Update(alumno);
+        
+        return "redirect:/alumno/listado";
     }
     
     

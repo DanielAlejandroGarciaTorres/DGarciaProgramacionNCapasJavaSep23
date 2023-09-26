@@ -40,11 +40,26 @@ public class AlumnoDAOImplementation implements IAlumnoDAO{
     @Override
     @Transactional
     public void Add(Alum alumno) {
-        alumno.setFechanacimiento(new Date());
+//        alumno.setFechanacimiento(new Date());
         Semestre semestre = new Semestre();
         semestre.setIdsemestre(1);
         alumno.setSemestre(semestre);
         entityManager.persist(alumno);
+    }
+
+    @Override
+    public Alum GetById(int idalumnoeditable) {
+        //JPQL
+        TypedQuery<Alum> query = entityManager.createQuery("FROM Alum WHERE idalumno=:idalumnoeditable", Alum.class);
+        query.setParameter("idalumnoeditable", idalumnoeditable);
+           
+        return query.getSingleResult();
+    }
+
+    @Override
+    @Transactional
+    public void Update(Alum alumno) {
+        entityManager.merge(alumno);
     }
     
     

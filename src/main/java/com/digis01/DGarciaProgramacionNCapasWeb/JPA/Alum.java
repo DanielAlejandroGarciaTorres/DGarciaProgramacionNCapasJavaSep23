@@ -14,7 +14,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -33,6 +38,7 @@ public class Alum implements Serializable {
     private String apellidopaterno;
     private String apellidomaterno;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date fechanacimiento;
 
@@ -103,13 +109,25 @@ public class Alum implements Serializable {
         this.apellidomaterno = apellidomaterno;
     }
 
+    // ${alumno.fechanacimiento}
     public Date getFechanacimiento() {
         return fechanacimiento;
     }
+    // *{alumno.fechanacimiento}
 
     public void setFechanacimiento(Date fechanacimiento) {
         this.fechanacimiento = fechanacimiento;
     }
+    
+    
+//    public void setFechanacimiento(String fechanacimiento) {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-DD");
+//        try {
+//            this.fechanacimiento = simpleDateFormat.parse(fechanacimiento);
+//        } catch (ParseException ex) {
+//            Logger.getLogger(Alum.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public Semestre getSemestre() {
         return semestre;
