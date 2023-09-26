@@ -21,75 +21,74 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author ALIEN 34
  */
-
 //localhost:8080/alumno/
 @Controller
 @RequestMapping("/alumno")
 public class AlumnoController {
-    
+
     private AlumnoDAOImplementation alumnoDAOImplementation;
 
-    @Autowired 
+    @Autowired
     public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation) {
         this.alumnoDAOImplementation = alumnoDAOImplementation;
     }
-    
+
     //localhost:8080/alumno/listado
     @GetMapping("/listado")
-    private String listadoAlumnos(Model model){
+    private String listadoAlumnos(Model model) {
         List<Alum> alumnos = alumnoDAOImplementation.GetAll(); // recuperación de datos
-        model.addAttribute("alumnos",alumnos); //envío de datos para HTML
-        return "listadoAlumnos"; 
-    }
-    
-    @GetMapping("/add")
-    public String Add(Model model){
-        
-        // Alum alumno = new Alum();
+        model.addAttribute("alumnos", alumnos); //envío de datos para HTML
         model.addAttribute("alumno", new Alum());
-        return "formAlumno";
+        return "listadoAlumnos";
     }
-    
-    @PostMapping("addalumno")
-    public String Add(@ModelAttribute Alum alumno){
-        
-        //la logica necesaria para enviar dicha información a DAO
-        alumnoDAOImplementation.Add(alumno);
-        
-        return "redirect:/alumno/listado";
-        
-    }
-    //localhost:8080/alumno/editarAlumno/85
-    @GetMapping("/editarAlumno/{idalumno}")
-    public String Update(@PathVariable int idalumno, Model model){
-        
-        //getByID --> precargar elforumalrio JPQL
-        Alum alumno = alumnoDAOImplementation.GetById(idalumno);
-        
-        model.addAttribute("alumno", alumno);
 
-        
-        // precargarlo con el model 
-        
-        return "formAlumnoEditable";
+
+    //localhost:8080/alumno/editarAlumno/85
+    @GetMapping("/form/{idalumno}")
+    public String Form(@PathVariable int idalumno, Model model) {
+
+        if (idalumno == 0) { //ADD
+            model.addAttribute("alumno", new Alum());
+            return "formAlumnoEditable";
+        } else { //UPDATE
+            Alum alumno = alumnoDAOImplementation.GetById(idalumno);
+            model.addAttribute("alumno", alumno);
+            return "formAlumnoEditable";
+        }
     }
-    
-    @PostMapping("/updateAlumno")
-    public String Update(@ModelAttribute Alum alumno){
+
+    @PostMapping("/form")
+    public String Update(@ModelAttribute Alum alumno) {
         // actualización
         Semestre semestre = new Semestre();
         semestre.setIdsemestre(2);
         alumno.setSemestre(semestre);
-        alumnoDAOImplementation.Update(alumno);
-        
+
+        if (alumno.getIdalumno() > 0) { //UPDATE
+            alumnoDAOImplementation.Update(alumno);
+        } else {
+            alumnoDAOImplementation.Add(alumno);
+        }
+
         return "redirect:/alumno/listado";
     }
+
+    //    @GetMapping("/add")
+//    public String Add(Model model) {
+//
+//        // Alum alumno = new Alum();
+//        model.addAttribute("alumno", new Alum());
+//        return "formAlumno";
+//    }
     
-    
-    
+//        @PostMapping("addalumno")
+//    public String Add(@ModelAttribute Alum alumno) {
+//
+//        //la logica necesaria para enviar dicha información a DAO
+//        alumnoDAOImplementation.Add(alumno);
+//
+//        return "redirect:/alumno/listado";
+//
+//    }
+
 }
-
-
-
-    
-
