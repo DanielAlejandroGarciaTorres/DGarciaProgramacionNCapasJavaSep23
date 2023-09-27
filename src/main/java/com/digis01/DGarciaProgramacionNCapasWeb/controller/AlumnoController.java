@@ -5,7 +5,9 @@
 package com.digis01.DGarciaProgramacionNCapasWeb.controller;
 
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.AlumnoDAOImplementation;
+import com.digis01.DGarciaProgramacionNCapasWeb.DAO.DireccionDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
+import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Direccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AlumnoController {
 
     private AlumnoDAOImplementation alumnoDAOImplementation;
+    private DireccionDAOImplementation direccionDAOImplementation;
 
-    @Autowired
-    public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation) {
+    @Autowired // inyeccion
+    public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation,
+                            DireccionDAOImplementation direccionDAOImplementation) {
         this.alumnoDAOImplementation = alumnoDAOImplementation;
+        this.direccionDAOImplementation = direccionDAOImplementation;
     }
 
     //localhost:8080/alumno/listado
@@ -39,6 +44,9 @@ public class AlumnoController {
         List<Alum> alumnos = alumnoDAOImplementation.GetAll(); // recuperación de datos
         model.addAttribute("alumnos", alumnos); //envío de datos para HTML
         model.addAttribute("alumno", new Alum());
+        
+        List<Direccion> direcciones = direccionDAOImplementation.GetAll();
+        
         return "listadoAlumnos";
     }
 
