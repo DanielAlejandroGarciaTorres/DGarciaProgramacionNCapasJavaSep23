@@ -14,5 +14,7 @@ import java.util.List;
 public interface IDireccionDAO {
     
     List<Direccion> GetAll();
+    
+    void Add(Direccion direccion);
 
 }

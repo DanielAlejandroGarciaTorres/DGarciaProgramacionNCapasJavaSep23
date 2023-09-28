@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class AlumnoDAOImplementation implements IAlumnoDAO{
 
-    private EntityManager entityManager;
+    private EntityManager entityManager; // referencia / conexión / persistencia  
 
     @Autowired //Inyección de dependencias.
     public AlumnoDAOImplementation(EntityManager entityManager){
@@ -31,20 +31,27 @@ public class AlumnoDAOImplementation implements IAlumnoDAO{
     @Override
     public List<Alum> GetAll() {
         
+        // entityManager - Peresistencia 
         TypedQuery<Alum> query = entityManager.createQuery("FROM Alum", Alum.class);
-        List<Alum> alumnos = query.getResultList();
+        List<Alum> alumnos = query.getResultList();  // la tabla
+        
+         // objeto - registros - recurso 
         
         return alumnos;
     }
 
     @Override
     @Transactional
-    public void Add(Alum alumno) {
+    public int Add(Alum alumno) {//
 //        alumno.setFechanacimiento(new Date());
         Semestre semestre = new Semestre();
         semestre.setIdsemestre(1);
         alumno.setSemestre(semestre);
         entityManager.persist(alumno);
+        
+        return alumno.getIdalumno();
+//        Alum alumMuestra = alumno;
+//        alumMuestra.getNombre();
     }
 
     @Override

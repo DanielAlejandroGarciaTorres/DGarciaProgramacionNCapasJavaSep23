@@ -10,7 +10,8 @@ package com.digis01.DGarciaProgramacionNCapasWeb.JPA;
  */
 public class AlumnoDireccion {
     private Alum alumno;
-
+    //private Direccion direccion
+    
     public AlumnoDireccion(){
         
     }

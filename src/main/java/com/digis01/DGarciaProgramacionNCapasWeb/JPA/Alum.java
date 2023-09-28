@@ -51,6 +51,12 @@ public class Alum implements Serializable {
     public Alum() {
     }
 
+    public Alum(int idalumno) {
+        this.idalumno = idalumno;
+    }
+    
+    
+
     public Alum(String nombre, String apellidopaterno, String apellidomaterno, Date fechanacimiento) {
         this.nombre = nombre;
         this.apellidopaterno = apellidopaterno;

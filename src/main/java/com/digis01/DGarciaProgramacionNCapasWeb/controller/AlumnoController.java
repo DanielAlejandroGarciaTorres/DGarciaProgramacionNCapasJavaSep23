@@ -10,6 +10,7 @@ import com.digis01.DGarciaProgramacionNCapasWeb.DAO.SemestreDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.AlumnoDireccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Direccion;
+import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Estado;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,9 +82,17 @@ public class AlumnoController {
         if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
             alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
         } else {
-            alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
+            int idAlumno = alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
             //alumnoDireccion.direccion.IdAlumno = 0; //Al idinsertado
-            //direccionDAOImplementation.Add(alumnodireccion.direccion);
+            
+            //NOTAAAAAAA: esto es por que no recuperamos información de dirección
+            Direccion direccion = new Direccion("Reforma", "09", "199", new Estado(1), new Alum(idAlumno));
+            
+            
+            alumnodireccion.setDireccion(direccion);
+            
+            
+            direccionDAOImplementation.Add(alumnodireccion.direccion);
         }
 
         return "redirect:/alumno/listado";
