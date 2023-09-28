@@ -6,7 +6,9 @@ package com.digis01.DGarciaProgramacionNCapasWeb.controller;
 
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.AlumnoDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.DireccionDAOImplementation;
+import com.digis01.DGarciaProgramacionNCapasWeb.DAO.SemestreDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
+import com.digis01.DGarciaProgramacionNCapasWeb.JPA.AlumnoDireccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Direccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
 import java.util.List;
@@ -30,12 +32,15 @@ public class AlumnoController {
 
     private AlumnoDAOImplementation alumnoDAOImplementation;
     private DireccionDAOImplementation direccionDAOImplementation;
+    private SemestreDAOImplementation semestreDAOImplementation;
 
     @Autowired // inyeccion
     public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation,
-                            DireccionDAOImplementation direccionDAOImplementation) {
+                            DireccionDAOImplementation direccionDAOImplementation,
+                            SemestreDAOImplementation semestreDAOImplementation) {
         this.alumnoDAOImplementation = alumnoDAOImplementation;
         this.direccionDAOImplementation = direccionDAOImplementation;
+        this.semestreDAOImplementation = semestreDAOImplementation;
     }
 
     //localhost:8080/alumno/listado
@@ -45,8 +50,8 @@ public class AlumnoController {
         model.addAttribute("alumnos", alumnos); //envío de datos para HTML
         model.addAttribute("alumno", new Alum());
         
-        List<Direccion> direcciones = direccionDAOImplementation.GetAll();
-        
+        //List<Direccion> direcciones = direccionDAOImplementation.GetAll();
+       
         return "listadoAlumnos";
     }
 
@@ -54,9 +59,10 @@ public class AlumnoController {
     //localhost:8080/alumno/editarAlumno/85
     @GetMapping("/form/{idalumno}")
     public String Form(@PathVariable int idalumno, Model model) {
-
+        List<Semestre> semestres = semestreDAOImplementation.GetAll();
+        model.addAttribute("semestres", semestres);
         if (idalumno == 0) { //ADD
-            model.addAttribute("alumno", new Alum());
+            model.addAttribute("alumnodireccion", new AlumnoDireccion());
             return "formAlumnoEditable";
         } else { //UPDATE
             Alum alumno = alumnoDAOImplementation.GetById(idalumno);
@@ -66,16 +72,18 @@ public class AlumnoController {
     }
 
     @PostMapping("/form")
-    public String Update(@ModelAttribute Alum alumno) {
+    public String Update(@ModelAttribute AlumnoDireccion alumnodireccion) {
         // actualización
         Semestre semestre = new Semestre();
         semestre.setIdsemestre(2);
-        alumno.setSemestre(semestre);
+        alumnodireccion.getAlumno().setSemestre(semestre);
 
-        if (alumno.getIdalumno() > 0) { //UPDATE
-            alumnoDAOImplementation.Update(alumno);
+        if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
+            alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
         } else {
-            alumnoDAOImplementation.Add(alumno);
+            alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
+            //alumnoDireccion.direccion.IdAlumno = 0; //Al idinsertado
+            //direccionDAOImplementation.Add(alumnodireccion.direccion);
         }
 
         return "redirect:/alumno/listado";
