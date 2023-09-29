@@ -13,10 +13,12 @@ import com.digis01.DGarciaProgramacionNCapasWeb.JPA.AlumnoDireccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Direccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Estado;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,26 +81,55 @@ public class AlumnoController {
         }
     }
 
+    
+      // VALIDACIÓN CON INFORMACIÓN DEL CLIENTE
+    
+//    @PostMapping("/form")
+//    public String Update(@ModelAttribute AlumnoDireccion alumnodireccion) {
+//        // actualización
+//        Semestre semestre = new Semestre();
+//        semestre.setIdsemestre(2);
+//        alumnodireccion.getAlumno().setSemestre(semestre);
+//
+//        if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
+//            alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
+//        } else {
+//            int idAlumno = alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
+//            //alumnoDireccion.direccion.IdAlumno = 0; //Al idinsertado
+//            //NOTAAAAAAA: esto es por que no recuperamos información de dirección
+//            Direccion direccion = new Direccion("Reforma", "09", "199", new Estado(1), new Alum(idAlumno));
+//            alumnodireccion.setDireccion(direccion); 
+//            direccionDAOImplementation.Add(alumnodireccion.getDireccion());
+//        }
+//
+//        return "redirect:/alumno/listado";
+//    }
+    
+    
+    // VALIDACIÓN CON CLIENTE Y SERVIDOR
     @PostMapping("/form")
-    public String Update(@ModelAttribute AlumnoDireccion alumnodireccion) {
+    public String Update(@Valid @ModelAttribute("alumnodireccion") AlumnoDireccion alumnodireccion, BindingResult bindingResult, Model model ) {
         // actualización
-        Semestre semestre = new Semestre();
-        semestre.setIdsemestre(2);
-        alumnodireccion.getAlumno().setSemestre(semestre);
-
+        
+        
+        if (bindingResult.hasErrors()){
+            
+            model.addAttribute("alumnodireccion", alumnodireccion);
+            return "formAlumnoEditable";
+        }
+//        
+//        Semestre semestre = new Semestre();
+//        semestre.setIdsemestre(2);
+//        alumnodireccion.getAlumno().setSemestre(semestre);
+//
         if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
             alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
         } else {
             int idAlumno = alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
             //alumnoDireccion.direccion.IdAlumno = 0; //Al idinsertado
-            
             //NOTAAAAAAA: esto es por que no recuperamos información de dirección
             Direccion direccion = new Direccion("Reforma", "09", "199", new Estado(1), new Alum(idAlumno));
-            
-            
-            alumnodireccion.setDireccion(direccion);
-            
-            
+            alumnodireccion.setDireccion(direccion); 
             direccionDAOImplementation.Add(alumnodireccion.getDireccion());
         }
 

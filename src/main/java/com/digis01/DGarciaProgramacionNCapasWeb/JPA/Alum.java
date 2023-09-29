@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,7 +35,8 @@ public class Alum implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idalumno;
 
-    @Basic
+    @NotEmpty(message = "Ingresa datos")
+    @Size(min = 3, max = 5, message = "Cadena entre 3 y 5")
     private String nombre;
     private String apellidopaterno;
     private String apellidomaterno;

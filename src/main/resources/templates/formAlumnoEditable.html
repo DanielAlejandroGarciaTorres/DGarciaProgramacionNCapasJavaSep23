@@ -25,6 +25,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <input type="text" class="form-control" placeholder="Nombre" onkeypress="return sololetras(event,'lblNombre')" id="txtNombre" name="nombre" th:field="*{alumno.nombre}"/>
                         </div>
                         <label id="lblNombre"></label>
+                        <label class="text-danger" th:if="${#fields.hasErrors('alumno.nombre')}" th:errors="*{alumno.nombre}"></label>
                     </div>
                     <div class="col-md-4">
                         <div class="input-group mb-3">

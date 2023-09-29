@@ -4,13 +4,17 @@
  */
 package com.digis01.DGarciaProgramacionNCapasWeb.JPA;
 
+import jakarta.validation.Valid;
+
 /**
  *
  * @author ALIEN 34
  */
 public class AlumnoDireccion {
 
+    @Valid
     private Alum alumno;
+    @Valid
     private Direccion direccion;
 
     public AlumnoDireccion() {
