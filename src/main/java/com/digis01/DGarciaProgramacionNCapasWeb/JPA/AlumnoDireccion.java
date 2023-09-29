@@ -9,11 +9,17 @@ package com.digis01.DGarciaProgramacionNCapasWeb.JPA;
  * @author ALIEN 34
  */
 public class AlumnoDireccion {
+
     private Alum alumno;
-    //private Direccion direccion
-    
-    public AlumnoDireccion(){
-        
+    private Direccion direccion;
+
+    public AlumnoDireccion() {
+
+    }
+
+    public AlumnoDireccion(Alum alumno, Direccion direccion) {
+        this.alumno = alumno;
+        this.direccion = direccion;
     }
 
     public Alum getAlumno() {
@@ -31,9 +37,4 @@ public class AlumnoDireccion {
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
-    public AlumnoDireccion(Alum alumno, Direccion direccion) {
-        this.alumno = alumno;
-        this.direccion = direccion;
-    }
-    public Direccion direccion;
 }

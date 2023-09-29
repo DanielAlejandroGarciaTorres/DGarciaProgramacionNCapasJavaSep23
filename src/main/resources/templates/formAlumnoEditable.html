@@ -21,33 +21,35 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <div class="row">
                     <div class="col-md-4">
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">@</span>
-                            <input type="text" class="form-control" placeholder="Nombre"  id="nombre" name="nombre" th:field="*{alumno.nombre}"/>
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Nombre" onkeypress="return sololetras(event,'lblNombre')" id="txtNombre" name="nombre" th:field="*{alumno.nombre}"/>
                         </div>
+                        <label id="lblNombre"></label>
                     </div>
                     <div class="col-md-4">
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">@</span>
-                            <input type="text" class="form-control" placeholder="Apellido Paterno" id="apellidopaterno" name="apellidopaterno" th:field="*{alumno.apellidopaterno}">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Apellido Paterno" onkeypress="return sololetras(event,'lblApellidoPaterno')" id="apellidopaterno" name="apellidopaterno" th:field="*{alumno.apellidopaterno}">
                         </div>
+                        <label id="lblApellidoPaterno"></label>
                     </div>
                     <div class="col-md-4">
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">@</span>
-                            <input type="text" class="form-control" placeholder="Apellido Materno" id="apellidomaterno" name="apellidomaterno" th:field="*{alumno.apellidopaterno}">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Apellido Materno" id="apellidomaterno" name="apellidomaterno" th:field="*{alumno.apellidomaterno}">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-8 ">
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">@</span>
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-calendar-event-fill"></i></span>
                             <input type="date" class="form-control" id="fechanacimiento" name="fechanacimiento" th:field="*{alumno.fechanacimiento}">
                         </div>
                     </div>
                     <div class="col-md-4 ">
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">@</span>
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-journal-bookmark-fill"></i></span>
                             <select class="form-select" aria-label="Default select example" name="semestre.idsemestre" id="semestre" th:field="*{alumno.semestre.idsemestre}">
                                 <option value="0">Seleccione un semestre</option>
                                 <option th:each="semestre : ${semestres}" th:value="${semestre.idsemestre}" th:text="${semestre.nombre}"></option>
@@ -61,35 +63,87 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <br/>
                 <h3>Dirección</h3>
 
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <input type="text" class="form-control" placeholder="Calle"  id="Calle" name="Calle" th:field="*{direccion.calle}"/>
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <input type="text" class="form-control" placeholder="Apellido Paterno" id="apellidopaterno" name="apellidopaterno" th:field="*{alumno.apellidopaterno}">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <input type="text" class="form-control" placeholder="Apellido Materno" id="apellidomaterno" name="apellidomaterno" th:field="*{alumno.apellidomaterno}">
+                <div class="row">
+                    <div class="col-md-5 ">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-signpost"></i></span>
+                            <input type="text" class="form-control" placeholder="Calle"  id="Calle" name="Calle" th:field="*{direccion.calle}"/>
+                        </div>
+                    </div>                    
+                    <div class="col-md-2 ">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">#</span>
+                            <input type="text" class="form-control" placeholder="Interior"  id="numerointerior" name="numerointerior" th:field="*{direccion.numerointerior}"/>
+                        </div>
+                    </div>                    
+                    <div class="col-md-2 ">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">#</span>
+                            <input type="text" class="form-control" placeholder="Exterior"  id="numeroexterior" name="numeroexterior" th:field="*{direccion.numeroexterior}"/>
+                        </div>
+                    </div> 
+                    <div class="col-md-3 ">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-flag-fill"></i></span>
+                            <select class="form-select" aria-label="Default select example" name="idestado" id="idestado" th:field="*{direccion.estado.idestado}">
+                                <option value="0">Seleccione un estado</option>
+                                <option th:each="estado : ${estados}" th:value="${estado.idestado}" th:text="${estado.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <input type="date" class="form-control"  id="fechanacimiento" name="fechanacimiento" th:field="*{alumno.fechanacimiento}">
+                <br/>
+                <hr/>
+                <br/>
+
+                <div class="row">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success col-md-4">GUARDAR <i class="bi bi-floppy2-fill"></i></button>
+                    </div>
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <select class="form-select" aria-label="Default select example" name="semestre.idsemestre" id="semestre" th:field="*{alumno.semestre.idsemestre}">
-                        <option value="0">Seleccione un semestre</option>
-                        <option th:each="semestre : ${semestres}" th:value="${semestre.idsemestre}" th:text="${semestre.nombre}"></option>
-                    </select>
-                </div>
+            </form>
         </div>
-
-        <input type="submit" value="Guardar"/> 
-    </form>
-</div>
-
+    </div>
 </body>
 </html>
+
+<script>
+    function sololetras(e,lbl) {
+
+        var letters = /^[A-Za-z]+$/;
+        var key = e.key;
+        if (key.match(letters))
+        {
+            document.getElementById(lbl).innerHTML = "";
+            return true;
+        } else
+        {
+             document.getElementById(lbl).innerHTML = "Solo Letras";  
+            $("#"+lbl).css('color', 'red');
+            return false;
+        }
+
+//        key = e.keyCode || e.which;
+//        teclado = String.fromCharCode(key).toLowerCase();
+//        letras = " áéíóúabcdefghijklmnñopqrstuvwxyzABCDEFGJ";
+//        especiales = "8-37-38-46-164";
+//        teclasEspeciales = false;
+//
+//        for (var i in especiales) {
+//            if (key == especiales[i]) {
+//                teclasEspeciales = true;
+//                break;
+//            }
+//        }
+//        if (letras.indexOf(teclado) == -1 && !teclasEspeciales) {
+//            document.getElementById("lblNombre").innerHTML = "Solo Letras";  //JS
+//            // document.getElementByClassName("lblNombre").innerHTML = "Solo Letras";  //JS
+//            $("#lblNombre").css('color', 'red');
+//            //$(".lblNombre")  //DOM  # ID  . Class * TODO JQUERY
+//            return false;
+//        }
+//        document.getElementById("lblNombre").innerHTML = "";
+    }
+
+</script>

@@ -6,6 +6,7 @@ package com.digis01.DGarciaProgramacionNCapasWeb.controller;
 
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.AlumnoDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.DireccionDAOImplementation;
+import com.digis01.DGarciaProgramacionNCapasWeb.DAO.EstadoDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.SemestreDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.AlumnoDireccion;
@@ -34,14 +35,17 @@ public class AlumnoController {
     private AlumnoDAOImplementation alumnoDAOImplementation;
     private DireccionDAOImplementation direccionDAOImplementation;
     private SemestreDAOImplementation semestreDAOImplementation;
+    private EstadoDAOImplementation estadoDAOImplementation;
 
     @Autowired // inyeccion
     public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation,
                             DireccionDAOImplementation direccionDAOImplementation,
-                            SemestreDAOImplementation semestreDAOImplementation) {
+                            SemestreDAOImplementation semestreDAOImplementation,
+                            EstadoDAOImplementation estadoDAOImplementation) {
         this.alumnoDAOImplementation = alumnoDAOImplementation;
         this.direccionDAOImplementation = direccionDAOImplementation;
         this.semestreDAOImplementation = semestreDAOImplementation;
+        this.estadoDAOImplementation = estadoDAOImplementation;
     }
 
     //localhost:8080/alumno/listado
@@ -60,8 +64,11 @@ public class AlumnoController {
     //localhost:8080/alumno/editarAlumno/85
     @GetMapping("/form/{idalumno}")
     public String Form(@PathVariable int idalumno, Model model) {
-        List<Semestre> semestres = semestreDAOImplementation.GetAll();
-        model.addAttribute("semestres", semestres);
+//        List<Semestre> semestres = semestreDAOImplementation.GetAll();
+//        model.addAttribute("semestres", semestres);
+        model.addAttribute("semestres", semestreDAOImplementation.GetAll());
+        model.addAttribute("estados", estadoDAOImplementation.GetAll());
+        
         if (idalumno == 0) { //ADD
             model.addAttribute("alumnodireccion", new AlumnoDireccion());
             return "formAlumnoEditable";
@@ -92,7 +99,7 @@ public class AlumnoController {
             alumnodireccion.setDireccion(direccion);
             
             
-            direccionDAOImplementation.Add(alumnodireccion.direccion);
+            direccionDAOImplementation.Add(alumnodireccion.getDireccion());
         }
 
         return "redirect:/alumno/listado";
