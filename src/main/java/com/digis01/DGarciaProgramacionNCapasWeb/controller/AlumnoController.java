@@ -7,6 +7,7 @@ package com.digis01.DGarciaProgramacionNCapasWeb.controller;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.AlumnoDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.DireccionDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.EstadoDAOImplementation;
+import com.digis01.DGarciaProgramacionNCapasWeb.DAO.PaisDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.DAO.SemestreDAOImplementation;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.AlumnoDireccion;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -38,16 +41,19 @@ public class AlumnoController {
     private DireccionDAOImplementation direccionDAOImplementation;
     private SemestreDAOImplementation semestreDAOImplementation;
     private EstadoDAOImplementation estadoDAOImplementation;
+    private PaisDAOImplementation paisDAOImplementation;
 
     @Autowired // inyeccion
     public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation,
                             DireccionDAOImplementation direccionDAOImplementation,
                             SemestreDAOImplementation semestreDAOImplementation,
-                            EstadoDAOImplementation estadoDAOImplementation) {
+                            EstadoDAOImplementation estadoDAOImplementation,
+                            PaisDAOImplementation paisDAOImplementation) {
         this.alumnoDAOImplementation = alumnoDAOImplementation;
         this.direccionDAOImplementation = direccionDAOImplementation;
         this.semestreDAOImplementation = semestreDAOImplementation;
         this.estadoDAOImplementation = estadoDAOImplementation;
+        this.paisDAOImplementation = paisDAOImplementation;
     }
 
     //localhost:8080/alumno/listado
@@ -69,7 +75,7 @@ public class AlumnoController {
 //        List<Semestre> semestres = semestreDAOImplementation.GetAll();
 //        model.addAttribute("semestres", semestres);
         model.addAttribute("semestres", semestreDAOImplementation.GetAll());
-        model.addAttribute("estados", estadoDAOImplementation.GetAll());
+        model.addAttribute("paises", paisDAOImplementation.GetAll());
         
         if (idalumno == 0) { //ADD
             model.addAttribute("alumnodireccion", new AlumnoDireccion());
@@ -135,6 +141,14 @@ public class AlumnoController {
 
         return "redirect:/alumno/listado";
     }
+    
+        @GetMapping("/GetEstadoByIdPais")
+    @ResponseBody
+    public List<Estado> GetEstadoByIdPais(@RequestParam("IdPais")int IdPais) {
+        List<Estado> estados = estadoDAOImplementation.GetByIdPais(IdPais); // Obtiene los datos del servicio
+        return estados;
+    }
+    
 
     //    @GetMapping("/add")
 //    public String Add(Model model) {

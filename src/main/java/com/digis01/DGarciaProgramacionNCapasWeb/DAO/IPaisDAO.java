@@ -4,15 +4,13 @@
  */
 package com.digis01.DGarciaProgramacionNCapasWeb.DAO;
 
-import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Estado;
+import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Pais;
 import java.util.List;
 
 /**
  *
  * @author ALIEN 34
  */
-public interface IEstadoDAO {
-    
-    List<Estado> GetAll();
-      List<Estado> GetByIdPais(int IdPais);
+public interface IPaisDAO {
+        List<Pais> GetAll();
 }
