@@ -35,7 +35,7 @@ public class EstadoDAOImplementation implements IEstadoDAO {
 
     @Override
     public List<Estado> GetByIdPais(int IdPais) {
-        TypedQuery<Estado> query = entityManager.createQuery("FROM Estado WHERE idpais = :id", Estado.class);
+        TypedQuery<Estado> query = entityManager.createQuery("SELECT e FROM Estado e WHERE e.pais.idpais = :id", Estado.class);
         query.setParameter("id", IdPais);
 
         List<Estado> direcciones = query.getResultList();

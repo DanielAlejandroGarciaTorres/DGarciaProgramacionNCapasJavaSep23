@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -49,7 +50,9 @@ public class Alum implements Serializable {
     @JoinColumn(name = "idsemestre") // columna con la llave foranea
     private Semestre semestre;
     
-    
+    @Lob
+    private String imagen;
+
     
     public Alum() {
     }
@@ -146,5 +149,12 @@ public class Alum implements Serializable {
         this.semestre = semestre;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
     
 }

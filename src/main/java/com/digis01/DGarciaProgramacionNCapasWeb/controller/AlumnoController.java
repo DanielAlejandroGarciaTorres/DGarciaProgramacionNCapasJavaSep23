@@ -15,7 +15,9 @@ import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Direccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Estado;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -114,7 +117,10 @@ public class AlumnoController {
     
     // VALIDACIÓN CON CLIENTE Y SERVIDOR
     @PostMapping("/form")
-    public String Update(@Valid @ModelAttribute("alumnodireccion") AlumnoDireccion alumnodireccion, BindingResult bindingResult, Model model ) {
+    public String Update(@Valid @ModelAttribute("alumnodireccion") AlumnoDireccion alumnodireccion, 
+            @RequestParam("imagenFile") MultipartFile imagenFile,
+            BindingResult bindingResult, 
+            Model model ) {
         // actualización
         
         
@@ -128,6 +134,19 @@ public class AlumnoController {
 //        semestre.setIdsemestre(2);
 //        alumnodireccion.getAlumno().setSemestre(semestre);
 //
+
+        try {
+            if (!imagenFile.isEmpty()) {
+                byte[] bytes = imagenFile.getBytes();
+                String imagenBase64 = Base64.encodeBase64String(bytes);
+                alumnodireccion.getAlumno().setImagen(imagenBase64);
+            } else {
+                alumnodireccion.getAlumno().setImagen(null);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
             alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
         } else {
