@@ -98,7 +98,8 @@ public class AlumnoController {
               alumnoDireccion.setAlumno(alumnoDAOImplementation.GetById(idalumno));
               alumnoDireccion.setDireccion(direccionDAOImplementation.GetByIdUsuario(idalumno));
               
-              
+              model.addAttribute("Estados", estadoDAOImplementation.GetByIdPais(alumnoDireccion.getDireccion().getEstado().getPais().getIdpais()));
+              //mode.addAttribute("Municipios", municiDAOImpl.getByIDEstado(alumnodirecciom.getDireccion().GetColonia().GetMuni().GetEstado.GetIDEstado) )
               model.addAttribute("alumnodireccion", alumnoDireccion);
               
             return "formAlumnoEditable";

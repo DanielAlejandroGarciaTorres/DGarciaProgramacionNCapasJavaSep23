@@ -108,11 +108,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4 ">
-                        <div class="input-group mb-3">
+                    <div class="col-md-4 "> 
+
+                        <div class="input-group mb-3"> 
                             <span class="input-group-text" id="basic-addon1"><i class="bi bi-journal-bookmark-fill"></i></span>
-                            <select class="form-select" aria-label="Default select example" name="direccion.estado.idestado" id="ddlEstado" th:field="*{direccion.estado.idestado}">
+                            <select th:if="${Estados == null}" class="form-select" aria-label="Default select example" name="direccion.estado.idestado" id="ddlEstado" th:field="*{direccion.estado.idestado}">
                                 <option value="0">Seleccione un estado</option>
+                            </select>
+                            <select th:unless="${Estados == null}" class="form-select" aria-label="Default select example" name="direccion.estado.idestado" id="ddlEstado" th:field="*{direccion.estado.idestado}">
+                                <option th:each="Estado : ${Estados}" th:value="${Estado.idestado}" th:text="${Estado.nombre}"></option>
                             </select>
                         </div>
                     </div>
