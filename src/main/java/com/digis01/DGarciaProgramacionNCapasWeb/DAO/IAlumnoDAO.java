@@ -16,7 +16,7 @@ public interface IAlumnoDAO {
     
     //firma de metodo 
     // tipo de retorno, nombre del método, parámetros
-    List<Alum> GetAll();
+    List<Alum> GetAll(Alum alumno);
     
     int Add(Alum alumno);
     
@@ -25,4 +25,6 @@ public interface IAlumnoDAO {
     Alum GetById(int idalumnoeditable);
     
     void Update(Alum alumno);
+    
+    void ChangeStatus(int idAlumno, boolean status);
 }

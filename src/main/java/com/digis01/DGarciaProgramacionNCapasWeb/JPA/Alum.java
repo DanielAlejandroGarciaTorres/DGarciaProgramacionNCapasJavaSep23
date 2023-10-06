@@ -53,12 +53,19 @@ public class Alum implements Serializable {
     @Lob
     private String imagen;
 
+    private String estatus;
     
     public Alum() {
     }
 
     public Alum(int idalumno) {
         this.idalumno = idalumno;
+    }
+
+    public Alum(String nombre, String apellidopaterno, String apellidomaterno) {
+        this.nombre = nombre;
+        this.apellidopaterno = apellidopaterno;
+        this.apellidomaterno = apellidomaterno;
     }
     
     
@@ -156,5 +163,16 @@ public class Alum implements Serializable {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
+    }
+
+    
+    
     
 }

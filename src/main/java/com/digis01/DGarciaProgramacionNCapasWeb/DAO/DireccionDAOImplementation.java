@@ -36,6 +36,13 @@ public class DireccionDAOImplementation implements IDireccionDAO{
         return direcciones;
     }
     
+    public Direccion GetByIdUsuario(int idAlumno){
+        TypedQuery<Direccion> query = entityManager.createQuery("FROM Direccion WHERE alumno.idalumno=:idAlumno", Direccion.class);
+        query.setParameter("idAlumno", idAlumno);
+        Direccion direccion = query.getSingleResult();
+        return direccion;
+    }
+    
     
     /*  */
 

@@ -16,5 +16,7 @@ public interface IDireccionDAO {
     List<Direccion> GetAll();
     
     void Add(Direccion direccion);
+    
+    Direccion GetByIdUsuario(int IdUsuario);
 
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layaout"
-    layout:decorate="~{layout}"> 
-    
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layaout"
+      layout:decorate="~{layout}"> 
+
     <body layout:fragment="body">
 
         <div class="container">
@@ -12,13 +12,46 @@
                                 EL - Expression language
                         <li th:each="alumno : ${alumnos}" th:text="${alumno.nombre}"></li>
                     </ul>-->
+            <form th:action="@{/alumno/listado}" method="post" th:object="${alumnoBusqueda}">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Nombre"  id="txtNombre" onkeypress="return sololetras(event)" th:field="*{nombre}"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Apellido Paterno" id="apellidopaterno" name="apellidopaterno" th:field="*{apellidopaterno}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Apellido Materno" id="apellidomaterno" name="apellidomaterno" th:field="*{apellidomaterno}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-info col-md-">BUSCAR <i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <br/>
+            <hr/>
+            <br/>
 
             <div class="row">
                 <a th:href="@{/alumno/form/{idalumno}(idalumno=0)}" class="btn btn-success">Agregar</a>
             </div>
-            
-            </br>
-            
+
+            <br/>
+            <hr/>
+            <br/>
+
             <table class="table">
                 <thead>
                     <tr>
@@ -28,6 +61,8 @@
                         <th scope="col">Apellido Paterno</th>
                         <th scope="col">Apellido Materno</th>
                         <th scope="col">Fecha de Nacimiento</th>
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Estatus</th>
                         <th scope="col">Actualizar</th>
                     </tr>
                 </thead>
@@ -44,6 +79,22 @@
                         <td th:text="${alumno.apellidomaterno}"></td>
                         <td th:text="${alumno.fechanacimiento}"></td>
                         <td>
+                            <img th:if="${alumno.imagen != null and alumno.imagen != ''}" th:src="'data:image/png;base64,' + ${alumno.imagen}" style="max-width: 100%; max-height: 80px;" alt="Imagen desde la base de datos" />
+                            <img th:unless="${alumno.imagen != null and alumno.imagen != ''}" src="/image/default-image.png" style="max-width: 100%; max-height: 80px;" alt="Imagen por defecto" />
+                        </td>
+                        <td>
+<!--                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" th:id="'switch-' + ${alumno.idalumno}" th:checked="${alumno.estatus == 'Y'}" th:onchange="'cambiarEstado(' + ${alumno.idalumno} + ')'">
+                                <label class="form-check-label" th:for="'switch-' + ${alumno.idalumno}" th:text="${alumno.estatus == 'Y' ? 'Activo' : 'Inactivo'}"></label>
+                            </div>-->
+                            <div th:if="${alumno.estatus == 'N'}" class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" th:id="${alumno.idalumno}" onchange="ChangeStatus(this)">
+                            </div>
+                            <div th:unless="${alumno.estatus == 'N'}" class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" th:id="${alumno.idalumno}" onchange="ChangeStatus(this)" checked>
+                            </div>
+                        </td>
+                        <td>
                             <a th:href="@{/alumno/form/{idalumno}(idalumno=${alumno.idalumno})}" class="btn btn-warning">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
@@ -54,3 +105,21 @@
         </div>
     </body>
 </html>
+
+<script>
+    function ChangeStatus(e){
+        var status = e.checked
+        var idAlumno = e.id
+        
+        $.ajax({
+            type : "GET" ,
+            url : "/alumno/ChangeStatus" ,
+            datatype : "json" ,
+            data : {idAlumno : idAlumno, status : status } ,
+            success : {},
+            error : {
+                //Alert
+            }  
+        });
+    }
+</script>

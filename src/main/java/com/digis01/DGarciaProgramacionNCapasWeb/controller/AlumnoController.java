@@ -48,10 +48,10 @@ public class AlumnoController {
 
     @Autowired // inyeccion
     public AlumnoController(AlumnoDAOImplementation alumnoDAOImplementation,
-                            DireccionDAOImplementation direccionDAOImplementation,
-                            SemestreDAOImplementation semestreDAOImplementation,
-                            EstadoDAOImplementation estadoDAOImplementation,
-                            PaisDAOImplementation paisDAOImplementation) {
+            DireccionDAOImplementation direccionDAOImplementation,
+            SemestreDAOImplementation semestreDAOImplementation,
+            EstadoDAOImplementation estadoDAOImplementation,
+            PaisDAOImplementation paisDAOImplementation) {
         this.alumnoDAOImplementation = alumnoDAOImplementation;
         this.direccionDAOImplementation = direccionDAOImplementation;
         this.semestreDAOImplementation = semestreDAOImplementation;
@@ -62,16 +62,24 @@ public class AlumnoController {
     //localhost:8080/alumno/listado
     @GetMapping("/listado")
     private String listadoAlumnos(Model model) {
-        List<Alum> alumnos = alumnoDAOImplementation.GetAll(); // recuperación de datos
+
+        List<Alum> alumnos = alumnoDAOImplementation.GetAll(new Alum("", "", "")); // recuperación de datos
         model.addAttribute("alumnos", alumnos); //envío de datos para HTML
-        model.addAttribute("alumno", new Alum());
-        
-        //List<Direccion> direcciones = direccionDAOImplementation.GetAll();
-       
+        model.addAttribute("alumnoBusqueda", new Alum());
+//List<Direccion> direcciones = direccionDAOImplementation.GetAll();
         return "listadoAlumnos";
     }
 
-
+    @PostMapping("/listado")
+    private String listadoAlumnos(@ModelAttribute("alumnoBusqueda") Alum alumnoBusqueda, Model model) {
+        
+        List<Alum> alumnos = alumnoDAOImplementation.GetAll(alumnoBusqueda);
+        model.addAttribute("alumnos", alumnos); //envío de datos para HTML
+        model.addAttribute("alumnoBusqueda", alumnoBusqueda);
+//List<Direccion> direcciones = direccionDAOImplementation.GetAll();
+        return "listadoAlumnos";
+    }
+    
     //localhost:8080/alumno/editarAlumno/85
     @GetMapping("/form/{idalumno}")
     public String Form(@PathVariable int idalumno, Model model) {
@@ -79,20 +87,25 @@ public class AlumnoController {
 //        model.addAttribute("semestres", semestres);
         model.addAttribute("semestres", semestreDAOImplementation.GetAll());
         model.addAttribute("paises", paisDAOImplementation.GetAll());
-        
+
         if (idalumno == 0) { //ADD
             model.addAttribute("alumnodireccion", new AlumnoDireccion());
             return "formAlumnoEditable";
         } else { //UPDATE
-            Alum alumno = alumnoDAOImplementation.GetById(idalumno);
-            model.addAttribute("alumno", alumno);
+//            Alum alumno = alumnoDAOImplementation.GetById(idalumno);
+//            model.addAttribute("alumno", alumno);
+              AlumnoDireccion alumnoDireccion = new AlumnoDireccion();
+              alumnoDireccion.setAlumno(alumnoDAOImplementation.GetById(idalumno));
+              alumnoDireccion.setDireccion(direccionDAOImplementation.GetByIdUsuario(idalumno));
+              
+              
+              model.addAttribute("alumnodireccion", alumnoDireccion);
+              
             return "formAlumnoEditable";
         }
     }
 
-    
-      // VALIDACIÓN CON INFORMACIÓN DEL CLIENTE
-    
+    // VALIDACIÓN CON INFORMACIÓN DEL CLIENTE
 //    @PostMapping("/form")
 //    public String Update(@ModelAttribute AlumnoDireccion alumnodireccion) {
 //        // actualización
@@ -113,19 +126,16 @@ public class AlumnoController {
 //
 //        return "redirect:/alumno/listado";
 //    }
-    
-    
     // VALIDACIÓN CON CLIENTE Y SERVIDOR
     @PostMapping("/form")
-    public String Update(@Valid @ModelAttribute("alumnodireccion") AlumnoDireccion alumnodireccion, 
+    public String Update(@Valid @ModelAttribute("alumnodireccion") AlumnoDireccion alumnodireccion,
+            BindingResult bindingResult,
             @RequestParam("imagenFile") MultipartFile imagenFile,
-            BindingResult bindingResult, 
-            Model model ) {
+            Model model) {
         // actualización
-        
-        
-        if (bindingResult.hasErrors()){
-            
+
+        if (bindingResult.hasErrors()) {
+
             model.addAttribute("alumnodireccion", alumnodireccion);
             return "formAlumnoEditable";
         }
@@ -148,26 +158,34 @@ public class AlumnoController {
         }
 
         if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
+            //alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
+            
             alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
+            
         } else {
             int idAlumno = alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
             //alumnoDireccion.direccion.IdAlumno = 0; //Al idinsertado
             //NOTAAAAAAA: esto es por que no recuperamos información de dirección
             Direccion direccion = new Direccion("Reforma", "09", "199", new Estado(1), new Alum(idAlumno));
-            alumnodireccion.setDireccion(direccion); 
+            alumnodireccion.setDireccion(direccion);
             direccionDAOImplementation.Add(alumnodireccion.getDireccion());
         }
 
         return "redirect:/alumno/listado";
     }
-    
-        @GetMapping("/GetEstadoByIdPais")
+
+    @GetMapping("/GetEstadoByIdPais")
     @ResponseBody
-    public List<Estado> GetEstadoByIdPais(@RequestParam("IdPais")int IdPais) {
+    public List<Estado> GetEstadoByIdPais(@RequestParam("IdPais") int IdPais) {
         List<Estado> estados = estadoDAOImplementation.GetByIdPais(IdPais); // Obtiene los datos del servicio
         return estados;
     }
     
+    @GetMapping("/ChangeStatus")
+    @ResponseBody
+    public void ChangeStatus(@RequestParam("idAlumno") int idAlumno, @RequestParam("status") boolean status) {
+        alumnoDAOImplementation.ChangeStatus(idAlumno, status);
+    }
 
     //    @GetMapping("/add")
 //    public String Add(Model model) {
@@ -176,7 +194,6 @@ public class AlumnoController {
 //        model.addAttribute("alumno", new Alum());
 //        return "formAlumno";
 //    }
-    
 //        @PostMapping("addalumno")
 //    public String Add(@ModelAttribute Alum alumno) {
 //
@@ -186,5 +203,4 @@ public class AlumnoController {
 //        return "redirect:/alumno/listado";
 //
 //    }
-
 }

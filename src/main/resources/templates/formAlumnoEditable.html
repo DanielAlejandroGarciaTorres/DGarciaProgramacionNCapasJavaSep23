@@ -21,9 +21,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <div class="container">
             <form th:action="@{/alumno/form}" method="post" th:object="${alumnodireccion}" enctype="multipart/form-data">
 
-                <input type="hidden" th:field="*{alumno.idalumno}"> //null
+                <input type="hidden" th:field="*{alumno.idalumno}"> 
 
-                <h3>Usuario</h3>
+                <h3>Alumno</h3>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="input-group mb-3">
@@ -116,14 +116,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             </select>
                         </div>
                     </div>
-<!--                    <div class="col-md-4 ">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-journal-bookmark-fill"></i></span>
-                            <select class="form-select" aria-label="Default select example" name="direccion.estado.idestado" id="ddlMunicipio">
-                                <option value="0">Seleccione un municipio</option>
-                            </select>
-                        </div>
-                    </div>-->
+                    <!--                    <div class="col-md-4 ">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1"><i class="bi bi-journal-bookmark-fill"></i></span>
+                                                <select class="form-select" aria-label="Default select example" name="direccion.estado.idestado" id="ddlMunicipio">
+                                                    <option value="0">Seleccione un municipio</option>
+                                                </select>
+                                            </div>
+                                        </div>-->
                 </div>
 
                 <br/>
@@ -233,25 +233,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             });
         });
 
-//        $("#ddlEstado").change(function () {
-//            $.ajax({
-//                type: "GET",
-//                url: "/alumno/GetMunicipioByIdEstado", // La URL del controlador
-//                dataType: "json",
-//                data: {IdEstado: $("#ddlEstado").val()},
-//                success: function (municipios) {
-//                    $("#ddlMunicipio").empty();
-//                    $("#ddlMunicipio").append('<option value="0">' + 'Seleccione una municipio' + '</option>');
-//                    $.each(municipios, function (i, municipio) {
-//                        $("#ddlEstado").append('<option value="'
-//                                + municipio.idmunicipio + '">'
-//                                + municipio.nombre + '</option>');
-//                    });
-//                },
-//                error: function () {
-//                    alert("Error al obtener los datos.");
-//                }
-//            });
-//        });
+        $("#ddlEstado").change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/alumno/GetMunicipioByIdEstado", // La URL del controlador
+                dataType: "json",
+                data: {IdEstado: $("#ddlEstado").val()},
+                success: function (municipios) {
+                    $("#ddlMunicipio").empty();
+                    $("#ddlMunicipio").append('<option value="0">' + 'Seleccione una municipio' + '</option>');
+                    $.each(municipios, function (i, municipio) {
+                        $("#ddlEstado").append('<option value="'
+                                + municipio.idmunicipio + '">'
+                                + municipio.nombre + '</option>');
+                    });
+                },
+                error: function () {
+                    alert("Error al obtener los datos.");
+                }
+            });
+        });
     });
 </script>
