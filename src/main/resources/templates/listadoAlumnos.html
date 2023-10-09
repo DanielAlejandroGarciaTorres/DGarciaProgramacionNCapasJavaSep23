@@ -52,7 +52,7 @@
             <hr/>
             <br/>
 
-            <table class="table">
+            <table id="myTable" class="table">
                 <thead>
                     <tr>
                         <th scope="col">Eliminar</th>
@@ -83,10 +83,10 @@
                             <img th:unless="${alumno.imagen != null and alumno.imagen != ''}" src="/image/default-image.png" style="max-width: 100%; max-height: 80px;" alt="Imagen por defecto" />
                         </td>
                         <td>
-<!--                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" th:id="'switch-' + ${alumno.idalumno}" th:checked="${alumno.estatus == 'Y'}" th:onchange="'cambiarEstado(' + ${alumno.idalumno} + ')'">
-                                <label class="form-check-label" th:for="'switch-' + ${alumno.idalumno}" th:text="${alumno.estatus == 'Y' ? 'Activo' : 'Inactivo'}"></label>
-                            </div>-->
+                            <!--                            <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" th:id="'switch-' + ${alumno.idalumno}" th:checked="${alumno.estatus == 'Y'}" th:onchange="'cambiarEstado(' + ${alumno.idalumno} + ')'">
+                                                            <label class="form-check-label" th:for="'switch-' + ${alumno.idalumno}" th:text="${alumno.estatus == 'Y' ? 'Activo' : 'Inactivo'}"></label>
+                                                        </div>-->
                             <div th:if="${alumno.estatus == 'N'}" class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" th:id="${alumno.idalumno}" onchange="ChangeStatus(this)">
                             </div>
@@ -107,19 +107,23 @@
 </html>
 
 <script>
-    function ChangeStatus(e){
+    function ChangeStatus(e) {
         var status = e.checked
         var idAlumno = e.id
-        
+
         $.ajax({
-            type : "GET" ,
-            url : "/alumno/ChangeStatus" ,
-            datatype : "json" ,
-            data : {idAlumno : idAlumno, status : status } ,
-            success : {},
-            error : {
+            type: "GET",
+            url: "/alumno/ChangeStatus",
+            datatype: "json",
+            data: {idAlumno: idAlumno, status: status},
+            success: {},
+            error: {
                 //Alert
-            }  
+            }
         });
     }
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
 </script>

@@ -72,14 +72,14 @@ public class AlumnoController {
 
     @PostMapping("/listado")
     private String listadoAlumnos(@ModelAttribute("alumnoBusqueda") Alum alumnoBusqueda, Model model) {
-        
+
         List<Alum> alumnos = alumnoDAOImplementation.GetAll(alumnoBusqueda);
         model.addAttribute("alumnos", alumnos); //envío de datos para HTML
         model.addAttribute("alumnoBusqueda", alumnoBusqueda);
 //List<Direccion> direcciones = direccionDAOImplementation.GetAll();
         return "listadoAlumnos";
     }
-    
+
     //localhost:8080/alumno/editarAlumno/85
     @GetMapping("/form/{idalumno}")
     public String Form(@PathVariable int idalumno, Model model) {
@@ -94,14 +94,19 @@ public class AlumnoController {
         } else { //UPDATE
 //            Alum alumno = alumnoDAOImplementation.GetById(idalumno);
 //            model.addAttribute("alumno", alumno);
-              AlumnoDireccion alumnoDireccion = new AlumnoDireccion();
-              alumnoDireccion.setAlumno(alumnoDAOImplementation.GetById(idalumno));
-              alumnoDireccion.setDireccion(direccionDAOImplementation.GetByIdUsuario(idalumno));
-              
-              model.addAttribute("Estados", estadoDAOImplementation.GetByIdPais(alumnoDireccion.getDireccion().getEstado().getPais().getIdpais()));
-              //mode.addAttribute("Municipios", municiDAOImpl.getByIDEstado(alumnodirecciom.getDireccion().GetColonia().GetMuni().GetEstado.GetIDEstado) )
-              model.addAttribute("alumnodireccion", alumnoDireccion);
-              
+            AlumnoDireccion alumnoDireccion = new AlumnoDireccion();
+            alumnoDireccion.setAlumno(alumnoDAOImplementation.GetById(idalumno));
+            alumnoDireccion.setDireccion(direccionDAOImplementation.GetByIdUsuario(idalumno));
+            
+            //try catch 
+            if (alumnoDireccion.getDireccion().getEstado() != null) {
+                model.addAttribute("Estados", estadoDAOImplementation.GetByIdPais(alumnoDireccion.getDireccion().getEstado().getPais().getIdpais()));
+            }
+            
+            
+            //mode.addAttribute("Municipios", municiDAOImpl.getByIDEstado(alumnodirecciom.getDireccion().GetColonia().GetMuni().GetEstado.GetIDEstado) )
+            model.addAttribute("alumnodireccion", alumnoDireccion);
+
             return "formAlumnoEditable";
         }
     }
@@ -160,9 +165,9 @@ public class AlumnoController {
 
         if (alumnodireccion.getAlumno().getIdalumno() > 0) { //UPDATE
             //alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
-            
+
             alumnoDAOImplementation.Update(alumnodireccion.getAlumno());
-            
+
         } else {
             int idAlumno = alumnoDAOImplementation.Add(alumnodireccion.getAlumno()); //Regresar el IDINSERTADO
             //alumnoDireccion.direccion.IdAlumno = 0; //Al idinsertado
@@ -181,7 +186,7 @@ public class AlumnoController {
         List<Estado> estados = estadoDAOImplementation.GetByIdPais(IdPais); // Obtiene los datos del servicio
         return estados;
     }
-    
+
     @GetMapping("/ChangeStatus")
     @ResponseBody
     public void ChangeStatus(@RequestParam("idAlumno") int idAlumno, @RequestParam("status") boolean status) {
