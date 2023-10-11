@@ -23,7 +23,7 @@ public class DemoServiceImplementation implements IDemoServicio{
 
     @Override
     public Resultado Suma(NumerosOperacion numerosOperacion) {
-        return new Resultado(numerosOperacion.getNumero1() + numerosOperacion.getNumero2());
+        return new Resultado(numerosOperacion.getNumero1() + numerosOperacion.getNumero3());
     }
     
     
