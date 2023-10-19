@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +28,11 @@ public class LoginController {
         alumno.setNombre("Kevin");
         session.setAttribute("Username", "Joserbp");
         session.setAttribute("Alumno", alumno);
+        model.addAttribute("alumno", new Alum());
         return "Login";
     }
     @PostMapping("/")
-    public String Login(@RequestBody() Alum alumnoIngresado){
+    public String Login(@ModelAttribute("alumno") Alum alumnoIngresado){
         //Alumn alumnoLogin = GetByEmail(alumnoIngresado.Email)
         //if (existAlum)
             //label Datos incorrectos
@@ -42,7 +44,7 @@ public class LoginController {
             //else
                 //label Datos incorrectos
                 // return "Login"
-                return "Login";
+                return "redirect:alumno/listado";
     }
         
    
