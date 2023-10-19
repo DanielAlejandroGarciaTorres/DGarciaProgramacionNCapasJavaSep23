@@ -26,8 +26,7 @@ public class DireccionDAOImplementation implements IDireccionDAO{
         this.entityManager = entityManager;
     }
     
-    
-    
+    @Override
     public List<Direccion> GetAll(){
         
         TypedQuery<Direccion> query = entityManager.createQuery("FROM Direccion", Direccion.class);
@@ -36,6 +35,7 @@ public class DireccionDAOImplementation implements IDireccionDAO{
         return direcciones;
     }
     
+    @Override
     public Direccion GetByIdUsuario(int idAlumno){
         TypedQuery<Direccion> query = entityManager.createQuery("FROM Direccion WHERE alumno.idalumno=:idAlumno", Direccion.class);
         query.setParameter("idAlumno", idAlumno);
