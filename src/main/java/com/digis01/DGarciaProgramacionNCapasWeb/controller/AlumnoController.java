@@ -14,6 +14,7 @@ import com.digis01.DGarciaProgramacionNCapasWeb.JPA.AlumnoDireccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Direccion;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Estado;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Semestre;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -61,8 +62,10 @@ public class AlumnoController {
 
     //localhost:8080/alumno/listado
     @GetMapping("/listado")
-    private String listadoAlumnos(Model model) {
-
+    private String listadoAlumnos(Model model, HttpSession session) {
+        
+        String username = session.getAttribute("Username").toString();
+        Alum alumnoSession = (Alum)session.getAttribute("Alumno");
         List<Alum> alumnos = alumnoDAOImplementation.GetAll(new Alum("", "", "")); // recuperación de datos
         model.addAttribute("alumnos", alumnos); //envío de datos para HTML
         model.addAttribute("alumnoBusqueda", new Alum());
@@ -82,7 +85,8 @@ public class AlumnoController {
 
     //localhost:8080/alumno/editarAlumno/85
     @GetMapping("/form/{idalumno}")
-    public String Form(@PathVariable int idalumno, Model model) {
+    public String Form(@PathVariable int idalumno, Model model, HttpSession session) {
+        String Username = session.getAttribute("Username").toString();
 //        List<Semestre> semestres = semestreDAOImplementation.GetAll();
 //        model.addAttribute("semestres", semestres);
         model.addAttribute("semestres", semestreDAOImplementation.GetAll());
@@ -99,10 +103,12 @@ public class AlumnoController {
             alumnoDireccion.setDireccion(direccionDAOImplementation.GetByIdUsuario(idalumno));
             
             //try catch 
-            if (alumnoDireccion.getDireccion().getEstado() != null) {
+            if (alumnoDireccion.getDireccion()!= null) { 
                 model.addAttribute("Estados", estadoDAOImplementation.GetByIdPais(alumnoDireccion.getDireccion().getEstado().getPais().getIdpais()));
+                //TODAS LAS DEMAS LISTAS            
             }
-            
+
+
             
             //mode.addAttribute("Municipios", municiDAOImpl.getByIDEstado(alumnodirecciom.getDireccion().GetColonia().GetMuni().GetEstado.GetIDEstado) )
             model.addAttribute("alumnodireccion", alumnoDireccion);
