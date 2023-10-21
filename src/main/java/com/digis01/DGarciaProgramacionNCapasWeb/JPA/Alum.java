@@ -54,6 +54,8 @@ public class Alum implements Serializable {
     private String imagen;
 
     private String estatus;
+    private String email;
+    private String password;
     
     public Alum() {
     }
@@ -170,6 +172,22 @@ public class Alum implements Serializable {
 
     public void setEstatus(String estatus) {
         this.estatus = estatus;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     
