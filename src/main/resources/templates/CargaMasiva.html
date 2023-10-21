@@ -9,7 +9,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
     <body layout:fragment="body">
         <div class = "container">
-            <h1></h1>
+            <br>
+            <br>
+            <form method="POST" action="/CargaMasiva" enctype="multipart/form-data">
+                <input type="file" name="archivo" />
+                <input type="submit" value="Procesar" />
+            </form>
+        </div>
+        <div class = "container">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Fila</th>
+                        <th>Erorres</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>
+
         </div>
     </body>
 </html>
