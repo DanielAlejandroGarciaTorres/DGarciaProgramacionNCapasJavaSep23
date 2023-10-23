@@ -6,7 +6,12 @@ package com.digis01.DGarciaProgramacionNCapasWeb.controller;
 
 import com.digis01.DGarciaProgramacionNCapasWeb.Entity.ResultExcel;
 import com.digis01.DGarciaProgramacionNCapasWeb.JPA.Alum;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -33,30 +38,35 @@ public class CargaMasiva {
         return "CargaMasiva";
     }
     
-    @PostMapping("/CargaMasiva/excel")
-    public String CargaMasivaExel(@RequestParam MultipartFile archivoExcel) {
-        
-        return "CargaMasiva";
-    }
     @PostMapping("/CargaMasiva/txt")
     public String CargaMasivaTxt(@RequestParam MultipartFile archivoTxt) {
         
         return "CargaMasiva";
     }
 
-    @PostMapping("/CargaMasiva")
-    public String CargaMasiva(Model model,@RequestParam("archivo") MultipartFile archivo) throws IOException {
+    @PostMapping("/CargaMasiva/excel")
+    public String CargaMasiva(Model model,@RequestParam("archivo") MultipartFile archivo, HttpSession session) throws IOException {
 
         if (archivo != null && !archivo.isEmpty()) {
             String extension = StringUtils.getFilenameExtension(archivo.getOriginalFilename());
             if (extension.equals("xlsx")) {
                 List<Alum> alumnos = LeerArchivo(archivo);
-                if(alumnos.size() > 0){
+                String root = System.getProperty("user.dir");
+                String path = "src/main/resources/static/archivos/";
+                String fileName = archivo.getOriginalFilename(); 
+                String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                String absolutePath = root + "/" + path + fecha +fileName;
+                archivo.transferTo(new File(absolutePath));
+                if(!alumnos.isEmpty()){
                     ResultExcel result = Validar(alumnos);
-                    if(result.getErrores().size() > 0){
+                    if(!result.getErrores().isEmpty()){
                         model.addAttribute("errores", result.getErrores());
                         return "CargaMasiva";
                     }
+                    else{
+                        session.setAttribute("path", absolutePath);
+                        return "CargaMasiva";
+                    }   
                 }else{
                     //Validaciones
                 }
@@ -67,6 +77,17 @@ public class CargaMasiva {
             //Validaciones
         }
         return "View";
+    }
+    
+    @PostMapping("/CargaMasiva/AddBD")  //EL BTN NUEVO ( SOLO SE VE CUANDO EL ARCHIVO ESTA COMPLETO)
+    public String AddBaseDatos(HttpSession session){
+        String path = session.getAttribute("path").toString();
+        
+//        List<Alum> alumnos = LeerArchivo(archivo); //Modificar para poder usar el path
+//        for(Alum alumno : alumnos){
+//            //DAO ADD (alumno)
+//        }
+        return "CargaMasiva";  //MOSTRAR AL USUARIO UNA LEYENDA DATOS CARGADOS EN LA BD
     }
 
     public ResultExcel Validar(List<Alum> alumnos){
@@ -118,6 +139,7 @@ public class CargaMasiva {
             alumnos.add(alumno);
             
         }
+        workbook.close();
         return alumnos;
     }
 }
